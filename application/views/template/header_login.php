@@ -9,8 +9,9 @@
     <meta name="description" content="Catatan Keuangan Programmer">
     <meta name="author" content="TensaiTech">
 
-    <title><?=strtoupper($title)?> - Aplikasi Pencatatan Keuangan</title>
+    <title> - Aplikasi Pencatatan Keuangan</title>
 
+    <!-- Custom fonts for this template-->
     <!-- Custom fonts for this template-->
     <link href="<?=site_url('assets/vendor/fontawesome-free/css/all.min.css')?>" rel="stylesheet" type="text/css">
     <link
@@ -20,7 +21,7 @@
     <!-- Custom styles for this template-->
     <link href="<?=site_url('assets/css/sb-admin-2.min.css')?>" rel="stylesheet">
 
-    <link rel="stylesheet" href="//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
-    <link rel="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+    <link rel="stylesheet" href="<?=site_url('assets/css/dataTables.dataTables.min.css')?>">
+    <link rel='<?=base_url('assets/css/bootstrap_datepicker.min.css')?>'>
 
 </head>

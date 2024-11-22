@@ -31,7 +31,7 @@ class Auth extends CI_Controller {
                 $us='admin';
                 $ps='123456';
                 if($_POST['username']==$us && $_POST['pswd']==$ps){
-                    $datauser=array("user"=>$us);
+                    $datauser=array("user"=>$us,"role"=>"admin","logat"=>date('Y-m-d H:i:s'),"ukode"=>"USR674068090fd396.43485430");
                     $this->session->set_userdata($datauser);
                     redirect('home');
                 }else{
