@@ -35,8 +35,6 @@
                                 <button id="btambah" class="btn btn-rounded btn-primary">Tambah</button>
                                 </div>
                             </div>
-                         
-                           
                         </div>
                     </div>
                 </div>
@@ -131,7 +129,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Batal</button>
+                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Batal</button>
                         <button class="btn btn-primary" id="bInsert" type="button">Tambah</button></div>
                 </div>
             </div>

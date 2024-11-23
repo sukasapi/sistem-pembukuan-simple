@@ -25,7 +25,7 @@ class Transaction_m extends CI_Model
 
     public function get_detail($id)
     {
-        $this->db->where($this->table . '_id', $id);
+        $this->db->where('transaksi_id', $id);
         $this->db->from($this->table);
         $query = $this->db->get();
 
@@ -87,7 +87,31 @@ class Transaction_m extends CI_Model
 
     public function update($data, $id)
     {
-        $this->db->update($this->table, $data, array($this->table . '_id' => $id));
+        $this->db->update($this->table, $data, array('transaksi_id' => $id));
+    }
+
+    function upload_lpj($kode=null,$file=null){
+
+        $pathlpj='./media/lpj/';
+        $name=uniqid("LPJ",true).".pdf";
+        $config = array(
+        'upload_path' => $pathlpj,
+        "file_name"=>$name,
+        'allowed_types' => "pdf",
+        'overwrite' => TRUE,
+        );
+        $this->load->library('upload', $config);  
+            $this->upload->initialize($config);
+           
+            if(!$this->upload->do_upload('lpj'))  
+            {  
+                return array('stat'=>'fail','msg'=>'upload gagal dilakukan','data'=>$this->upload->display_errors());
+            }  
+            else  
+            {  
+                $this->update(array('lpj'=>$name),$kode);
+                return array('stat'=>'ok','msg'=>'upload berhasil','data'=>$name);
+            }  
     }
 
 }
