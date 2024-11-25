@@ -61,8 +61,9 @@ class Transaction extends CI_Controller {
         $table= [];
 		foreach ($result['data'] as $key) {
 			$table[$i] = $key;
-			$table[$i]['action'] = "<a href='".site_url($this->pageInfo['table_base'].'/update/'.$key[$this->pageInfo['table_base'].'_id'])."' type='button' class='btn btn-update btn-primary'>Update</a>";
-			$table[$i]['action'] .= " <button type='button' class='btn update-status btn-danger' data-id='{$key[$this->pageInfo['table_base'].'_id']}' data-status='inactive'>Delete</button>";
+			$table[$i]['action'] = " <button type='button' class='btn uploadLPJ btn-warning' data-token='{$key['transaksi_id']}'><i class='fa fa-upload' aria-hidden='true'></i></button> ";
+			$table[$i]['action'] .= "<a href='".site_url($this->pageInfo['table_base'].'/update/'.$key['transaksi_id'])."' type='button' class='btn btn-update btn-primary'><i class='fa fa-edit' aria-hidden='true'></i></a>";
+			$table[$i]['action'] .= " <button type='button' class='btn update-status btn-danger' data-id='{$key['transaksi_id']}' data-status='inactive'><i class='fa fa-trash' aria-hidden='true'></i></button>";
 
 			$i++;
 		}
@@ -95,5 +96,19 @@ class Transaction extends CI_Controller {
         $process = $this->transaction_m->update($data,$this->post['id']);
         echo json_encode($process);
     }
+
+	function upload_lpj(){
+		$return=array();
+		
+		  if(isset($_FILES["lpj"]["name"]))  
+           {  
+			$return=$this->transaction_m->upload_lpj($_POST['kodetransaksi'],$_FILES);
+           }  else{
+			$return="tidak ditemukan";
+		   }
+		
+		
+		echo json_encode($return);
+	}
 
 }

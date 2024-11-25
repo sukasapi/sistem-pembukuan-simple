@@ -11,7 +11,7 @@ class Category_m extends CI_Model
 
     public function get_detail($id)
     {
-        $this->db->where($this->table . '_id', $id);
+        $this->db->where('category_id', $id);
         $this->db->from($this->table);
         $query = $this->db->get();
 
@@ -72,7 +72,7 @@ class Category_m extends CI_Model
 
     public function update($data, $id)
     {
-        $this->db->update($this->table, $data, array($this->table . '_id' => $id));
+        $this->db->update($this->table, $data, array('category_id' => $id));
     }
 
 }
