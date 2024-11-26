@@ -16,29 +16,29 @@ class Transaction extends CI_Controller {
 		$this->pageInfo = $info;
 		$this->post = $this->input->post();
 
-        $this->load->model("{$this->pageInfo['table_base']}_m");
-        $this->load->model("category_m");
+        $this->load->model("transaction_m");
+        $this->load->model("Akun_m");
 	}
 
 	public function index()
 	{
-		$this->pageInfo['nav_ids'][] = "{$this->pageInfo['table_base']}_list";
+		$this->pageInfo['nav_ids'][] = "transaction_list";
 		$this->pageInfo['page_title'][] = "List";
 		$data['title'] = "List Transaksi";
 		$this->load->view('template/header',$data);
-		$this->load->view("{$this->pageInfo['table_base']}/lists");
+		$this->load->view("transaction/lists");
 	}
 
 	public function create()
 	{
-		$this->pageInfo['nav_ids'][] = "{$this->pageInfo['table_base']}_create";
+		$this->pageInfo['nav_ids'][] = "transaction_create";
         $this->pageInfo['page_title'][] = "Create";
         $data = [
-            'category' => $this->category_m->get_datalist('active'),
+            'category' => $this->Akun_m->get_datalist('active'),
         ];
 		$data['title'] = "Create Transaksi";
 		$this->load->view('template/header',$data);
-		$this->load->view("{$this->pageInfo['table_base']}/create", $data);
+		$this->load->view("transaction/create", $data);
     }
     
 	public function update($id)
@@ -48,7 +48,7 @@ class Transaction extends CI_Controller {
         $data = [
             'detail' => $this->transaction_m->get_detail($id),
             'id' => $id,
-            'category' => $this->category_m->get_datalist('active'),
+            'category' => $this->Akun_m->get_datalist('active'),
         ];
 		$data['title'] = "Update Transaksi";
 		$this->load->view('template/header',$data);

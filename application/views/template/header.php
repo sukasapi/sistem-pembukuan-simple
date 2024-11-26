@@ -57,31 +57,33 @@
 
             <!-- Heading -->
             <div class="sidebar-heading">
-                Activity
+                Master Data
             </div>
-
-            <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-                    aria-expanded="true" aria-controls="collapseTwo">
+                <a class="nav-link" href="<?=site_url('Akun')?>">
                     <i class="fas fa-fw fa-cog"></i>
-                    <span>Kategori</span>
+                    <span>Akun</span>
                 </a>
-                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="<?=site_url('category')?>">Daftar Kategori</a>
-                        <a class="collapse-item" href="<?=site_url('category/create')?>">Tambah Kategori</a>
-                    </div>
-                </div>
             </li>
-             <!-- Divider -->
-             <hr class="sidebar-divider d-none d-md-block">
+            <li class="nav-item">
+                <a class="nav-link" href="<?=site_url('User')?>">
+                    <i class="fas fa-fw fa-users"></i>
+                    <span>Users</span>
+                </a>
+            </li>
+          
+
+
+            <hr class="sidebar-divider d-none d-md-block">
+              <!-- Heading -->
+              <div class="sidebar-heading">
+                Transaksi
+            </div>
             <li class="nav-item">
                 <a class="nav-link" href="<?=base_url('anggaran')?>">
                 <i class="fas fa-fw fa-cog"></i>
                     <span>Anggaran</span></a>
             </li>
-            <!-- Nav Item - Utilities Collapse Menu -->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
                     aria-expanded="true" aria-controls="collapseUtilities">
@@ -93,6 +95,24 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                         <a class="collapse-item" href="<?=site_url('transaction')?>">Daftar Transaksi</a>
                         <a class="collapse-item" href="<?=site_url('transaction/create')?>">Tambah Transaksi</a>
+                    </div>
+                </div>
+            </li>
+
+             <!-- Divider -->
+             <hr class="sidebar-divider d-none d-md-block">
+            <!-- Nav Item - Utilities Collapse Menu -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#menulaporan"
+                    aria-expanded="true" aria-controls="collapseUtilities">
+                    <i class="fas fa-fw fa-file"></i>
+                    <span>Laporan</span>
+                </a>
+                <div id="menulaporan" class="collapse" aria-labelledby="headingUtilities"
+                    data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item" href="#">Laporan 1</a>
+                        <a class="collapse-item" href="#">Laporan 2</a>
                     </div>
                 </div>
             </li>

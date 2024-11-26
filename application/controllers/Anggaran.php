@@ -7,7 +7,7 @@ class Anggaran extends CI_Controller {
 	{
 		parent::__construct();
 		$this->load->model('Anggaran_m','am');
-		$this->load->model('Category_m','cm');
+		$this->load->model('Akun_m','cm');
 		
 	}
 
@@ -68,7 +68,7 @@ class Anggaran extends CI_Controller {
 		}
 
 		$filter=array("ag.tahun_anggaran"=>$tahun,"ag.status"=>'1');
-		$display="ag.kode_anggaran as kode,ag.tahun_anggaran as tahun,ag.total_anggaran, a.name as nama_akun,a.description as des_akun,a.type as tipe_akun,u.nama_user";
+		$display="ag.kode_anggaran as kode,ag.tahun_anggaran as tahun,ag.total_anggaran, a.name as nama_akun,a.description as des_akun,a.tipe as tipe_akun,a.jenis as jenis_akun,u.nama_user";
 		$danggaran=$this->am->get_dataBudget($display,$filter);
 		
 		$result=array();

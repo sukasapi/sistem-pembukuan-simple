@@ -14,14 +14,14 @@ class Anggaran_m extends CI_Model
         if(count((array)$filter)>0){
             $this->db->select($display)
             ->from($this->table)
-            ->join('ukdw_akun as a','a.category_id=ag.kode_akun','LEFT')
+            ->join('ukdw_akun as a','a.akun_id=ag.kode_akun','LEFT')
             ->join('ukdw_user as u','u.id_user=ag.kode_user','LEFT')
             ->where($filter)
             ->order_by('a.name','ASC');
         }else{
             $this->db->select($display)
             ->from($this->table)
-            ->join('ukdw_akun as a','a.category_id=ag.kode_akun','LEFT')
+            ->join('ukdw_akun as a','a.akun_id=ag.kode_akun','LEFT')
             ->order_by('ag.name');
         }
        
