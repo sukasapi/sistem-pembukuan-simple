@@ -22,4 +22,16 @@ function stok_tahun($cap){
 function stok_bulan(){
 	return array('januari','februari','maret','april','mei','juni','juli','agustus','september','oktober','november','desember');
 }
+
+function isadmin(){
+	if(isset($_SESSION['role'])&& $_SESSION['role']=="admin"){
+		return true;
+	}else{
+		return false;
+	}
+}
+
+function urlback(){
+	return $_SERVER['HTTP_REFERER'];
+}
 ?>

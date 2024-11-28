@@ -14,7 +14,7 @@ class Transaction_m extends CI_Model
         $this->db->select_sum('nominal');
         $this->db->where('a.status', 'active'); //only active item
         $this->db->where('b.tipe', $type);
-        $this->db->join('ukdw_akun b', 'a.category_id = b.category_id', 'left'); 
+        $this->db->join('ukdw_akun b', 'a.category_id = b.akun_id', 'left'); 
         $this->db->from($this->table.' a');
         $query = $this->db->get();
 
