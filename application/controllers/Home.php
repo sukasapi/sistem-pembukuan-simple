@@ -33,6 +33,7 @@ class Home extends CI_Controller {
 
 	public function index()
 	{
+		
 		if(isset($_SESSION['user'])){
 			$this->pageInfo['page_title'][] = "Welcome";
 			$total_in = $this->transaction_m->get_total_by_type('in');

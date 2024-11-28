@@ -18,6 +18,14 @@ class Auth extends CI_Controller {
 	 * map to /index.php/welcome/<method_name>
 	 * @see https://codeigniter.com/user_guide/general/urls.html
 	 */
+    public function __construct()
+	{
+		parent::__construct();
+        $this->table_base = "ukdw_user";
+		$this->page_base = "User";
+        $this->load->model("User_m");
+    }
+     
 	public function index()
 	{
 	
@@ -25,34 +33,42 @@ class Auth extends CI_Controller {
 
     public function login(){
         $pesan="";
-       
         if(isset($_POST['username']) || isset($_POST['pswd'])){
             if($_POST['username']!="" && $_POST['pswd']!=""){
-                $us='admin';
-                $ps='123456';
-                if($_POST['username']==$us && $_POST['pswd']==$ps){
-                    $datauser=array("user"=>$us,"role"=>"admin","logat"=>date('Y-m-d H:i:s'),"ukode"=>"USR674068090fd396.43485430");
-                    $this->session->set_userdata($datauser);
-                    redirect('home');
+                $filter=array("login_user"=>$_POST['username'],"status"=>"1");
+                $display="id_user,login_user,nama_user,role,status,pass_user";
+                $pass=$_POST['pswd'];
+                $cekuser=$this->User_m->get_data($display,$filter);
+                if(count((array)$cekuser['data'])> 0){
+                    $cek=password_verify($pass, $cekuser['data'][0]['pass_user']);
+                    if($cek){
+                        $datauser=array("user"=>$cekuser['data'][0]['login_user'],"nama"=>$cekuser['data'][0]['nama_user'],"role"=>$cekuser['data'][0]['role'],"logat"=>date('Y-m-d H:i:s'),"ukode"=>"USR674068090fd396.43485430");
+                        $this->session->set_userdata($datauser);
+                        redirect('home');
+                       
+                    }else{
+                        $pesan="Username tidak ditemukan";
+                        $data['pesan']="Pastikan anda telah menginput nama dan password dengan benar";
+                        $this->load->view('template/header_login');
+                        $this->load->view('Auth/v_login',$data);
+                    }
+                  
                 }else{
-                $pesan="Username atau password anda salah";
-                $data['pesan']="Pastikan anda telah menginput nama dan password dengan benar";
+                $pesan="Username tidak ditemukan atau tidak aktif";
+                $data['pesan']=$pesan;
                 $this->load->view('template/header_login');
                 $this->load->view('Auth/v_login',$data);
-                $this->load->view('template/footer');
                 }
             }else{
                 $pesan="Pastikan anda telah menginput nama dan password";
-                $data['pesan']="Pastikan anda telah menginput nama dan password";
+                $data['pesan']=$pesan;
                 $this->load->view('template/header_login');
                 $this->load->view('Auth/v_login',$data);
-                $this->load->view('template/footer');
             }
         }else{
           
             $this->load->view('template/header_login');
             $this->load->view('Auth/v_login');
-            $this->load->view('template/footer');
         }
       
     }

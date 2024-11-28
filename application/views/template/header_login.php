@@ -7,11 +7,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="Catatan Keuangan Programmer">
-    <meta name="author" content="TensaiTech">
+    <meta name="author" content="Sukasapi">
 
     <title> - Aplikasi Pencatatan Keuangan</title>
 
-    <!-- Custom fonts for this template-->
     <!-- Custom fonts for this template-->
     <link href="<?=site_url('assets/vendor/fontawesome-free/css/all.min.css')?>" rel="stylesheet" type="text/css">
     <link
@@ -23,5 +22,4 @@
 
     <link rel="stylesheet" href="<?=site_url('assets/css/dataTables.dataTables.min.css')?>">
     <link rel='<?=base_url('assets/css/bootstrap_datepicker.min.css')?>'>
-
 </head>

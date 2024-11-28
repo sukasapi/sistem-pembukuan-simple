@@ -1,3 +1,13 @@
+<style>
+    .stickyfooter{
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        height: 60px; /* Set the fixed height of the footer here */
+        line-height: 60px; /* Vertically center the text there */
+        background-color: #f5f5f5;
+    }
+</style>
 <body class="bg-primary">
         <div id="layoutAuthentication">
             <div id="layoutAuthentication_content">
@@ -17,7 +27,7 @@
                                             }
                                         ?>
                                         <!-- Login form-->
-                                        <form action='<?=base_url('index.php/Auth/login')?>' method="POST" enctype='multipart/form-data'>
+                                        <form action='<?=base_url('Auth/login')?>' method="POST" enctype='multipart/form-data'>
                                             <!-- Form Group (email address)-->
                                             <div class="mb-3">
                                                 <label class="small mb-1" for="username">Username</label>
@@ -46,23 +56,18 @@
                 </main>
             </div>
             <div id="layoutAuthentication_footer">
-                <footer class="footer-admin mt-auto footer-dark">
+            <footer class="stickyfooter mt-auto footer-dark">
                     <div class="container-xl px-4">
                         <div class="row">
-                            <div class="col-md-6 small">Copyright © Your Website 2024</div>
-                            <div class="col-md-6 text-md-end small">
-                                <a href="#!">Privacy Policy</a>
-                                ·
-                                <a href="#!">Terms &amp; Conditions</a>
-                            </div>
+                            <div class="col-md-6 small">Copyright © sukasapi 2024</div>
                         </div>
                     </div>
                 </footer>
             </div>
         </div>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-        <script src='<?=base_url('assets')?>js/scripts.js'></script>
+        <script src="<?=base_url('assets/')?>js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+        <script src='<?=base_url('assets/')?>js/scripts.js'></script>
 
-        <script src="https://assets.startbootstrap.com/js/sb-customizer.js"></script>
+        <script src="<?=base_url('assets/')?>js/sb-customizer.js"></script>
    
 </body>

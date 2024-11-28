@@ -12,7 +12,7 @@ class User extends CI_Controller {
 			$urlback=urlback();
 			echo "<h1>Anda tidak memiliki akses ke halaman ini. Silahkan <a href='".base_url('Auth/logout')."'>login ulang</a></h1>";
 		}
-		$this->table_base = "ukdw_akun";
+		$this->table_base = "ukdw_user";
 		$this->page_base = "User";
 		$info = [
 			"page_title" => "Pengguna",
