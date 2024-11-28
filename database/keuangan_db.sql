@@ -100,7 +100,10 @@ CREATE TABLE `ukdw_user` (
 /*Data for the table `ukdw_user` */
 
 insert  into `ukdw_user`(`id_user`,`nama_user`,`login_user`,`pass_user`,`role`,`create_date`,`status`) values 
-('USR674068090fd396.43485430','toni joss','admin','827ccb0eea8a706c4c34a16891f84e7b','admin','2024-11-22 00:00:01','1');
+('USR674068090fd396.43485430','toni joss','admin','827ccb0eea8a706c4c34a16891f84e7b','admin','2024-11-22 00:00:01','1'),
+('USR67481d48bc92b6.91784585','admin baru','admin2','$2y$10$TEtMqWOJcJt1Qps770ZAguePgrQuMpkYHbzPitqGPBAlF.QQCD0IS','admin','2024-11-28 14:35:36','0'),
+('USR67481e070ecdc9.42691873','kasir satu','kasir','$2y$10$ADQH5VB7E3B0LdR/NKMFfuKSYNqzEa/au5PMK8GazW79r8X9FPZqO','kasir','2024-11-28 14:38:47','1'),
+('USR67481f00b1ec29.21345981','manajer satu','manajer','$2y$10$EfM.u4HQV4sPSrpL7itNt.IxIk8Y8XfC6FVhqbw2eVEvPM7q4E14G','manager','2024-11-28 14:42:56','1');
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
