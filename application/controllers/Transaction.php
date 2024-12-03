@@ -6,6 +6,12 @@ class Transaction extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
+		if(isset($_SESSION['user'])){
+
+		}else{
+			redirect("login");
+		}
+
 		$table_base = "transaction";
 		$info = [
 			"page_title" => ["Transaksi"],
@@ -34,9 +40,9 @@ class Transaction extends CI_Controller {
 		$this->pageInfo['nav_ids'][] = "transaction_create";
         $this->pageInfo['page_title'][] = "Create";
         $data = [
-            'category' => $this->Akun_m->get_datalist('active'),
+            'akun' => $this->Akun_m->get_datalist('active'),
         ];
-		$data['title'] = "Create Transaksi";
+		$data['title'] = "input Transaksi";
 		$this->load->view('template/header',$data);
 		$this->load->view("transaction/create", $data);
     }
@@ -48,7 +54,7 @@ class Transaction extends CI_Controller {
         $data = [
             'detail' => $this->transaction_m->get_detail($id),
             'id' => $id,
-            'category' => $this->Akun_m->get_datalist('active'),
+            'akun' => $this->Akun_m->get_datalist('active'),
         ];
 		$data['title'] = "Update Transaksi";
 		$this->load->view('template/header',$data);
@@ -59,19 +65,33 @@ class Transaction extends CI_Controller {
 		$result = $this->transaction_m->get_data();
         $i = 0;
         $table= [];
+		$no=1;
 		foreach ($result['data'] as $key) {
-			$table[$i] = $key;
-			$table[$i]['action'] = " <button type='button' class='btn uploadLPJ btn-warning' data-token='{$key['transaksi_id']}'><i class='fa fa-upload' aria-hidden='true'></i></button> ";
-			$table[$i]['action'] .= "<a href='".site_url($this->pageInfo['table_base'].'/update/'.$key['transaksi_id'])."' type='button' class='btn btn-update btn-primary'><i class='fa fa-edit' aria-hidden='true'></i></a>";
-			$table[$i]['action'] .= " <button type='button' class='btn update-status btn-danger' data-id='{$key['transaksi_id']}' data-status='inactive'><i class='fa fa-trash' aria-hidden='true'></i></button>";
-
+			$table[$i]['no']= $no;
+			$table[$i]['akun']= $key['category_name'];
+			$table[$i]['tanggal_transaksi']= date('d-m-Y',strtotime($key['create_date']));
+			$table[$i]['deskripsi']= $key['description'];
+			$table[$i]['tipe']= $key['category_type'];
+			$table[$i]['tanggal_lpj']= $key['lpj_date']!=""?date('d-m-Y',strtotime($key['lpj_date'])):"-";
+			$table[$i]['nominal']= rupiah($key['nominal']);
+			$table[$i]['action'] = " <button type='button' class='btn uploadLPJ btn-warning' data-token='{$key['transaction_id']}'><i class='fa fa-upload' aria-hidden='true'></i></button> ";
+			if($key['lpj_date']!=""){
+				$table[$i]['action'] .= "<button type='button' class='btn viewLPJ btn-success' data-token='{$key['transaction_id']}'><i class='fa fa-file' aria-hidden='true'></i></button> ";
+			}else{
+				
+			}
+			$table[$i]['action'] .= "<a href='".site_url($this->pageInfo['table_base'].'/update/'.$key['transaction_id'])."' type='button' class='btn btn-update btn-primary'><i class='fa fa-edit' aria-hidden='true'></i></a>";
+			$table[$i]['action'] .= " <button type='button' class='btn update-status btn-danger' data-id='{$key['transaction_id']}' data-status='inactive'><i class='fa fa-trash' aria-hidden='true'></i></button>";
 			$i++;
+			$no++;
 		}
 		$datatable = [
 			"data" => $table,
 			"draw" => $this->post['draw'],
 			"recordsTotal" =>$result['total_res'],
 			"recordsFiltered" =>$result['total_res'],
+			"sql"=>$result['sql'],
+			"post"=>  $_POST['filter']
 		];
 
 		echo json_encode($datatable);
@@ -109,6 +129,13 @@ class Transaction extends CI_Controller {
 		
 		
 		echo json_encode($return);
+	}
+
+	function viewLPJ(){
+		$idtran=$this->uri->segment(3);
+		$fileLPJ= $this->transaction_m->get_detail($idtran);
+		$data['url']=$fileLPJ['lpj_file'];
+		$this->load->view('transaction/viewLPJ',$data);
 	}
 
 }

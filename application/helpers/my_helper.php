@@ -32,6 +32,13 @@ function isadmin(){
 }
 
 function urlback(){
-	return $_SERVER['HTTP_REFERER'];
+	$CI =& get_instance();
+	$CI->load->library('user_agent');
+	if ($CI->agent->is_referral())
+	{
+		return $CI->agent->referrer();
+	}else{
+		return base_url('home');
+	}
 }
 ?>

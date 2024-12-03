@@ -1,25 +1,75 @@
 <div class="container-fluid">
     <div class="row">
-        <div class="col-md-8 col-sm-offset-2">
-            <form id="filter-form" class="form-inline">
-                <div class="form-group">
-                    <label>Tipe</label>
-                    <select class="form-control" name="type" onchange="return init_datatable()">
-                        <option value="">Semua</option>
-                        <option value="in">Pemasukan</option>
-                        <option value="out">Pengeluaran</option>
-                    </select>
+        <div class="col-md-12 mb-2">
+            <div class="card shadow">
+                <div class="card-header">
+                    <div class="card-title">Filter Pencarian</div>
                 </div>
-                <div class="form-group">
-                    <label>Tanggal</label>
-                    <input type="text" placeholder="Start" class="form-control datepicker" data-date-format="yyyy-mm-dd" name="range_start" onblur="return init_datatable()">
-                    <input type="text" placeholder="End" class="form-control datepicker" data-date-format="yyyy-mm-dd" name="range_end" onblur="return init_datatable()">
+                <div class="card-body">
+                    <form id="filter-form">
+                        <div class="row">
+                            <div class="col-3">
+                                <div class="form-group">
+                                    <label>Tipe</label>
+                                    <select class="form-control" name="jenis" id="jenis">
+                                        <option value="">Semua</option>
+                                        <option value="in">Pemasukan</option>
+                                        <option value="out">Pengeluaran</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="form-group">
+                                    <label>Jenis</label>
+                                    <select class="form-control" name="tipe" id="tipe">
+                                        <option value="">Semua</option>
+                                        <option value="rutin">Rutin</option>
+                                        <option value="program">Program</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-3 mb-2">
+                                <div class="form-group">
+                                    <label>Mulai</label>
+                                    <input type="date" placeholder="Start" class="form-control" data-date-format="dd-mm-yyyy" name="range_start" id="range_start">
+                                </div>
+                            </div>
+                            <div class="col-3 mb-2">
+                                <div class="form-group">
+                                    <label>Selesai</label>
+                                    <input type="date" placeholder="End" class="form-control" data-date-format="dd-mm-yyyy" name="range_end"  id="range_end">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                           
+                        </div>
+                    </form>
+                    <div class="row">
+                            <div class="col-12 mb-2">
+                                <button id="bsearch" class="btn btn-primary btn-block btn-rounded">Filter</button>
+                            </div>
+                        </div>
                 </div>
-            </form>
+            </div>
+      
            
         </div>
         <div class="col-12 my-2">
             <div class="card">
+               
+                    <?php if($_SESSION['role']=="admin" ||$_SESSION['role']=="kasir"){
+                        ?>
+                            <div class="card-header">
+                                <div class="float-right">
+                                    <button class="btn btn-info" id="btAdd"> <i class="fas fa-fw fa-plus"></i>Tambah Transaksi</button>
+                                </div>
+                            </div>
+                        <?php
+                    }else{
+
+                    }
+                    ?>
                 <div class="card-body">
                     <div class="table-responsive">
                         <table id="datatable" class="table table-stripe"></table>
@@ -64,6 +114,7 @@
 
     function init_datatable() {
         var serverSide = true;
+        
         $('#datatable').DataTable({
             serverSide: serverSide,
             destroy: true,
@@ -76,28 +127,38 @@
                     'filter': $("#filter-form").serialize(),
                     csrf_test_name: $.cookie('csrf_cookie_name')
                 },
+                complete: function (data) {
+                    },
                 type: 'POST'
             },
             columns: [
                 {
-                    data: 'create_date',
+                    data: 'no',
+                    title: 'No',
+                },
+                {
+                    data: 'tanggal_transaksi',
                     title: 'Tanggal',
+                },
+                {
+                    data: 'akun',
+                    title: 'Akun',
                 },
                 {
                     data: 'nominal',
                     title: 'Nominal',
                 },
                 {
-                    data: 'category_type',
+                    data: 'tipe',
                     title: 'Tipe',
                 },
                 {
-                    data: 'category_name',
-                    title: 'Kategori',
+                    data: 'deskripsi',
+                    title: 'Deskripsi',
                 },
                 {
-                    data: 'description',
-                    title: 'Deskripsi',
+                    data: 'tanggal_lpj',
+                    title: 'LPJ',
                 },
                 {
                     data: 'action',
@@ -138,6 +199,12 @@
 
     })
 
+    $('#datatable').on( "click", ".viewLPJ", function(){
+       var kodetran=$(this).data('token');
+       var urlview='<?=base_url('transaction/viewLPJ/')?>'+kodetran;
+       window.open(urlview,'_blank');
+    })
+
     $("#lpj").on('change',function(e){
         var filename = $(this).val();
         var extension = filename.replace(/^.*\./, '');
@@ -157,6 +224,28 @@
         var kodetransaksi=$('#kodetransaksi').val();
         uploadLPJ(filename,kodetransaksi);
     })
+
+    $("#bsearch").on("click",function(e){
+       getfilter();
+       init_datatable();
+    })
+
+    $("#btAdd").on("click",function(e){
+        var goTrans='<?=base_url('transaction/create')?>';
+        window.location.replace(goTrans);
+    })
+
+    function getfilter(){
+        var tipe=$("#tipe").val();
+        var jenis=$("#jenis").val();
+        var start=$("#range_start").val();
+        var end=$("#range_end").val();
+
+        $("#tipe").val(tipe);
+        $("#jenis").val(jenis);
+        $("#range_start").val(start);
+        $("#range_end").val(end);
+    }
 
 
     function uploadLPJ(input,kode){

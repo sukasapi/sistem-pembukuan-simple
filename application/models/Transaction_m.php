@@ -25,7 +25,7 @@ class Transaction_m extends CI_Model
 
     public function get_detail($id)
     {
-        $this->db->where('transaksi_id', $id);
+        $this->db->where('transaction_id', $id);
         $this->db->from($this->table);
         $query = $this->db->get();
 
@@ -38,8 +38,12 @@ class Transaction_m extends CI_Model
     {
         $server_side = $this->post['server_side'];
         parse_str($this->post['filter'], $filter);
-        if ($filter['type'] != '') {
-            $this->db->where('b.type', $filter['type']);
+        if ($filter['tipe'] != '') {
+            $this->db->where('b.tipe', $filter['tipe']);
+        }
+
+        if ($filter['jenis'] != '') {
+            $this->db->where('b.jenis', $filter['jenis']);
         }
 
 
@@ -57,8 +61,8 @@ class Transaction_m extends CI_Model
         // }
 
         $this->db->where('a.status', 'active'); //onli active item
-        $this->db->join('ukdw_akun b', 'a.category_id = b.category_id', 'left'); 
-        $this->db->select("SQL_CALC_FOUND_ROWS a.*, b.name category_name, b.type category_type", false);
+        $this->db->join('ukdw_akun b', 'a.category_id = b.akun_id', 'left'); 
+        $this->db->select("SQL_CALC_FOUND_ROWS a.*, b.name category_name, b.tipe category_type", false);
         $this->db->from($this->table.' a');
         $this->db->order_by('create_date', 'ASC');
 
@@ -66,7 +70,7 @@ class Transaction_m extends CI_Model
             $this->db->limit($this->post['length'], $this->post['start']);
         }
         $query = $this->db->get();
-
+        $sql=$this->db->last_query();
         $data = $query->result_array();
 
         // var_dump($this->db->last_query());exit;
@@ -77,6 +81,7 @@ class Transaction_m extends CI_Model
         return [
             "data" => $data,
             "total_res" => $total_res,
+            "sql"=>$sql
         ];
     }
 
@@ -87,13 +92,13 @@ class Transaction_m extends CI_Model
 
     public function update($data, $id)
     {
-        $this->db->update($this->table, $data, array('transaksi_id' => $id));
+        $this->db->update($this->table, $data, array('transaction_id' => $id));
     }
 
     function upload_lpj($kode=null,$file=null){
 
         $pathlpj='./media/lpj/';
-        $name=uniqid("LPJ",true).".pdf";
+        $name=str_replace(".","_",uniqid("LPJ",true)).".pdf";
         $config = array(
         'upload_path' => $pathlpj,
         "file_name"=>$name,
@@ -109,7 +114,7 @@ class Transaction_m extends CI_Model
             }  
             else  
             {  
-                $this->update(array('lpj'=>$name),$kode);
+                $this->update(array('lpj_file'=>$name,'lpj_date'=>date('Y-m-d')),$kode);
                 return array('stat'=>'ok','msg'=>'upload berhasil','data'=>$name);
             }  
     }

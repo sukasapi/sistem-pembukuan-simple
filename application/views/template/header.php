@@ -51,30 +51,40 @@
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
             </li>
+            <?php 
+                    if($_SESSION['role']=="admin"){
+            ?>
+                <!-- Divider -->
+                <hr class="sidebar-divider">
 
-            <!-- Divider -->
-            <hr class="sidebar-divider">
+                <!-- Heading -->
+                <div class="sidebar-heading">
+                    Master Data
+                </div>
+                <li class="nav-item">
+                    <a class="nav-link" href="<?=site_url('Akun')?>">
+                        <i class="fas fa-fw fa-cog"></i>
+                        <span>Akun</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="<?=site_url('User')?>">
+                        <i class="fas fa-fw fa-users"></i>
+                        <span>Users</span>
+                    </a>
+                </li>
+            <?php
+                    }else{
 
-            <!-- Heading -->
-            <div class="sidebar-heading">
-                Master Data
-            </div>
-            <li class="nav-item">
-                <a class="nav-link" href="<?=site_url('Akun')?>">
-                    <i class="fas fa-fw fa-cog"></i>
-                    <span>Akun</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="<?=site_url('User')?>">
-                    <i class="fas fa-fw fa-users"></i>
-                    <span>Users</span>
-                </a>
-            </li>
+                    }
+
+            ?>
+         
           
-
-
-            <hr class="sidebar-divider d-none d-md-block">
+            <?php 
+                    if($_SESSION['role']=="admin" || $_SESSION['role']=="kasir"){
+            ?>
+  <hr class="sidebar-divider d-none d-md-block">
               <!-- Heading -->
               <div class="sidebar-heading">
                 Transaksi
@@ -98,6 +108,13 @@
                     </div>
                 </div>
             </li>
+            <?php
+                    }else{
+                        
+                    }
+            ?>
+
+          
 
              <!-- Divider -->
              <hr class="sidebar-divider d-none d-md-block">
@@ -111,8 +128,8 @@
                 <div id="menulaporan" class="collapse" aria-labelledby="headingUtilities"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="#">Laporan 1</a>
-                        <a class="collapse-item" href="#">Laporan 2</a>
+                        <a class="collapse-item" href="<?=base_url('anggaran')?>">Laporan Anggaran</a>
+                        <a class="collapse-item" href="<?=base_url('transaction')?>">Laporan Transaksi</a>
                     </div>
                 </div>
             </li>

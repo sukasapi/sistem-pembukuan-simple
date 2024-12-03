@@ -6,6 +6,11 @@ class Anggaran extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
+		if(isset($_SESSION['user'])){
+
+		}else{
+			redirect("login");
+		}
 		$this->load->model('Anggaran_m','am');
 		$this->load->model('Akun_m','cm');
 		

@@ -73,15 +73,18 @@ CREATE TABLE `ukdw_transaksi` (
   `nominal` float NOT NULL,
   `description` varchar(255) DEFAULT NULL,
   `status` enum('active','inactive') NOT NULL DEFAULT 'active',
+  `lpj_date` date DEFAULT NULL,
+  `lpj_file` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`transaction_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 
 /*Data for the table `ukdw_transaksi` */
 
-insert  into `ukdw_transaksi`(`transaction_id`,`category_id`,`create_date`,`nominal`,`description`,`status`) values 
-(1,6,'2019-07-30 11:03:22',0,'','inactive'),
-(2,7,'2019-07-30 11:03:22',100000,'test','active'),
-(3,6,'2019-07-30 11:09:38',1000,'keluar','active');
+insert  into `ukdw_transaksi`(`transaction_id`,`category_id`,`create_date`,`nominal`,`description`,`status`,`lpj_date`,`lpj_file`) values 
+(1,6,'2019-07-30 11:03:22',0,'','inactive',NULL,NULL),
+(2,7,'2019-07-30 11:03:22',15000000,'test update dari 10 juta ke 15 juta','active','2024-12-03','LPJ674e7986de5a15_35085145.pdf'),
+(3,6,'2019-07-30 11:09:38',1000,'keluar','active',NULL,NULL),
+(4,7,'2024-12-02 22:28:09',12000000,'pembangunan 2 MCK','active',NULL,NULL);
 
 /*Table structure for table `ukdw_user` */
 
@@ -100,8 +103,8 @@ CREATE TABLE `ukdw_user` (
 /*Data for the table `ukdw_user` */
 
 insert  into `ukdw_user`(`id_user`,`nama_user`,`login_user`,`pass_user`,`role`,`create_date`,`status`) values 
-('USR674068090fd396.43485430','toni joss','admin','827ccb0eea8a706c4c34a16891f84e7b','admin','2024-11-22 00:00:01','1'),
-('USR67481d48bc92b6.91784585','admin baru','admin2','$2y$10$TEtMqWOJcJt1Qps770ZAguePgrQuMpkYHbzPitqGPBAlF.QQCD0IS','admin','2024-11-28 14:35:36','0'),
+('USR674068090fd396.43485430','toni joss','admin','$2y$10$/IGEGWBWxotbM/3NiQtB3eIVFGPRRA..mcfqCrPIAMztM6vKSPKRm','admin','2024-11-22 00:00:01','1'),
+('USR67481d48bc92b6.91784585','admin baru','admin2','$2y$10$TEtMqWOJcJt1Qps770ZAguePgrQuMpkYHbzPitqGPBAlF.QQCD0IS','admin','2024-11-28 14:35:36','1'),
 ('USR67481e070ecdc9.42691873','kasir satu','kasir','$2y$10$ADQH5VB7E3B0LdR/NKMFfuKSYNqzEa/au5PMK8GazW79r8X9FPZqO','kasir','2024-11-28 14:38:47','1'),
 ('USR67481f00b1ec29.21345981','manajer satu','manajer','$2y$10$EfM.u4HQV4sPSrpL7itNt.IxIk8Y8XfC6FVhqbw2eVEvPM7q4E14G','manager','2024-11-28 14:42:56','1');
 

@@ -6,6 +6,11 @@ class Akun extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
+		if(isset($_SESSION['user'])){
+
+		}else{
+			redirect("login");
+		}
 		$table_base = "ukdw_akun";
 		$page_base = "Akun";
 		$info = [
