@@ -4,8 +4,9 @@
             <div class="card">
                 <div class="card-body">
                     <form id="data-form">
+                      
                         <div class="form-group">
-                            <label class="col-sm-2 control-label">Nama Kategori</label>
+                            <label class="col-sm-2 control-label">Nama Akun</label>
                             <div class="col-sm-10">
                             <input type="text" class="form-control" disabled value="<?=$detail['name']?>" name="name">
                             </div>
@@ -14,6 +15,28 @@
                             <label class="col-sm-2 control-label">Deskripsi</label>
                             <div class="col-sm-10">
                             <input type="text" class="form-control" value="<?=$detail['description']?>" name="description">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Akun Induk</label>
+                            <div class="col-sm-10">
+                            <select class="form-control" name="akun_induk" id="induk">
+                                <option selected value="">Pilih Akun Induk</option>
+                                <?php foreach ($akuninduk as $ind) :?>
+                                    <?php 
+                                        if($detail['akun_induk'] == $ind['akun_id']){
+                                    ?>
+                                        <option selected value='<?=$ind['akun_id']?>'><?=$ind['name']." (".$ind['description'].")"?></option>
+                                    <?php
+                                        }else{
+                                    ?>
+                                        <option value='<?=$ind['akun_id']?>'><?=$ind['name']." (".$ind['description'].")"?></option>
+                                    <?php
+                                        }
+                                    ?>
+                                  
+                                <?php endforeach?>
+                            </select>
                             </div>
                         </div>
                         <div class="form-group">
@@ -62,7 +85,7 @@
             dataType: "JSON",
             success: function(data)
             {
-                window.location='<?=site_url('/Akun');?>';
+              window.location='<?=site_url('/Akun');?>';
             },
             error: function (jqXHR, textStatus, errorThrown)
             {

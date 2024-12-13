@@ -20,6 +20,28 @@ class Akun_m extends CI_Model
         return $data;
     }
 
+    public function get_name($id)
+    {
+        $this->db->where('akun_id', $id);
+        $this->db->from($this->table);
+        $query = $this->db->get();
+
+        $data = $query->row();
+
+        return $data->name;
+    }
+
+    public function get_akunlist($filter,$display)
+    {
+        $this->db->select($display);
+        $this->db->where($filter);
+        $this->db->from($this->table);
+        $query = $this->db->get();
+        $data = $query->result_array();
+        $sql=$this->db->last_query();
+        return $data;
+    }
+
     public function get_datalist($status){
         $this->db->where('status', $status); //onli active item
         $this->db->select("*", false);
@@ -76,14 +98,17 @@ class Akun_m extends CI_Model
         ];
     }
 
+    
+
     public function insert($data)
     {
-        $this->db->insert($this->table, $data);
+        $this->db->insert("ukdw_akun", $data);
     }
 
-    public function update($data, $id)
+    public function update($filter=null, $data=null)
     {
-        $this->db->update($this->table, $data, array('akun_id' => $id));
+        $this->db->where($filter);
+        $this->db->update("ukdw_akun", $data);
     }
 
 }

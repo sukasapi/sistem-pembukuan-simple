@@ -1,7 +1,6 @@
 <?php
 
 function rupiah($angka){
-	
 	$hasil_rupiah = "Rp " . number_format($angka,2,',','.');
 	return $hasil_rupiah;
 }
@@ -40,5 +39,9 @@ function urlback(){
 	}else{
 		return base_url('home');
 	}
+}
+
+function tipe_laporan(){
+	return array("rutin","program");
 }
 ?>

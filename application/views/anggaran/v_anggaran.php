@@ -42,20 +42,6 @@
                 <input type="hidden" name="<?=$this->security->get_csrf_token_name();?>" value="<?=$this->security->get_csrf_hash();?>" style="display: none">
                     <div class="table-responsive">
                         <table clas="table table-stripe" style="width:100%" id="tbanggaran">
-                            <thead>
-                                <tr>
-                                    <th>No</th>
-                                    <th>Akun</th>
-                                    <th>Anggaran</th>
-                                    <th>Tahun</th>
-                                    <th>Deskripsi Akun</th>
-                                    <th>Tipe Akun</th>
-                                    <th>Input Oleh</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-
-                            </tbody>
                         </table>
                     </div>
                 </div>
@@ -81,7 +67,7 @@
                                         <option disabled >Pilih Akun</option>
                                         <?php 
                                             foreach($akunlist as $al){
-                                                echo "<option value='".$al['category_id']."'>".$al['name']."</option>";
+                                                echo "<option value='".$al['akun_id']."'>".$al['name']."</option>";
                                             }
                                         ?>
                                     </select>
@@ -115,7 +101,7 @@
                                 </div> 
                             </div>
                             <div class="col-12">
-                            <label for='tahun'>Anggaran</label>
+                                <label for='tahun'>Anggaran</label>
                                 <div class="input-group mb-3">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">Rp.</span>
@@ -126,6 +112,10 @@
                                     </div>
                                 </div>
                             </div>  
+                            <div class="col-12">
+                                <label for='desk'>Deskripsi</label>
+                                <textarea class="form-control" id="desk"></textarea>
+                            </div>  
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -134,41 +124,165 @@
                 </div>
             </div>
         </div>
+        <div class="modal fade" id="mdEdit" tabindex="-1" role="dialog" aria-labelledby="mdTambah" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalCenterTitle">Edit Anggaran</h5>
+                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="alert alert-warning"> * Data dengan nomor akun yang sama akan menghapus inputan sebelumnya</div>
+                        <input type='hidden' name="kodeanggaranedit" id="kodeanggaranedit">
+                        <div class='row my-4'>
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label for='akun'>Akun</label>
+                                    <select name="akunedit" id="akunedit" class="form-control">
+                                        <option disabled >Pilih Akun</option>
+                                        <?php 
+                                            foreach($akunlist as $al){
+                                                echo "<option value='".$al['akun_id']."'>".$al['name']."</option>";
+                                            }
+                                        ?>
+                                    </select>
+                                    <small id="akuninfo"></small>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label for='tipe'>Tipe Akun</label>
+                                    <input type="text" readonly class="form-control" id="infoakun">
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label for='tahun'>Tahun Anggaran</label>
+                                    <select name="tahunanggaranedit" id="tahunanggaranedit" class="form-control">
+                                        <option disabled selected>Pilih Tahun Anggaran</option>
+                                        <?php 
+                                            foreach($stoktahun as $st){
+                                                if(isset($tahunseleksi) && $tahunseleksi!=""){
+                                                    if($tahunseleksi==$st){
+                                                        echo "<option selected value='".$st."'>".$st."</option>";
+                                                    }else{
+                                                        echo "<option value='".$st."'>".$st."</option>";
+                                                    }
+                                                        
+                                                }else{
+                                                    if(date('Y')==$st){
+                                                        echo "<option selected value='".$st."'>".$st."</option>";
+                                                    }else{
+                                                        echo "<option value='".$st."'>".$st."</option>";
+                                                    }
+                                                }         
+                                            }
+                                        ?>
+                                    </select>
+                                
+                                </div> 
+                            </div>
+                            <div class="col-12">
+                            <label for='anggaran'>Anggaran</label>
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">Rp.</span>
+                                    </div>
+                                    <input type="text" name='anggaranedit' id='anggaranedit' class="form-control" aria-label="Amount (to the nearest rupiah)">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">.00</span>
+                                    </div>
+                                </div>
+                            </div>  
+                            <div class="col-12">
+                                <label for='deskEdit'>Deskripsi</label>
+                                <textarea class="form-control" id="deskEdit"></textarea>
+                            </div>  
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Batal</button>
+                        <button class="btn btn-primary" id="bUpdate" type="button">Ubah</button></div>
+                </div>
+            </div>
+        </div>
 
     <!--- END MODAL -->
 </div>
 <script>
-    $(document).ready(function(){
-        var angrTable = $('#tbanggaran').DataTable( {
-                    dom:'trip',
-                    paging:false,
-                    info:false,
-                    ajax: {
-                        url: '<?=base_url('anggaran/get_dataajax')?>',
-                        type: 'POST',
-                        data: function (d) {
-                            d.tahun = $("#stoktahun").val();
-                        }
-                    },
-                processing: true,
-                serverSide: true
-				} );
 
-        $("#stoktahun").on("change",function(e){
-            angrTable.ajax.reload();
+    function init_datatable() {
+        var serverSide = true;
+        $('#tbanggaran').DataTable({
+            serverSide: serverSide,
+            destroy: true,
+            searching: false,
+            ordering: false,
+            ajax: {
+                url: '<?=base_url('anggaran/get_dataajax')?>',
+                type: 'POST',
+                data: function (d) {
+                    d.tahun = $("#stoktahun").val();
+                }
+            },
+            columns: [
+                {
+                    data: 'no',
+                    title: 'No',
+                },
+                {
+                    data: 'akun',
+                    title: 'Nama Akun',
+                },
+                {
+                    data: 'nominal',
+                    title: 'Nominal',
+                },
+                {
+                    data: 'tahun',
+                    title: 'Tahun',
+                },
+                {
+                    data: 'deskripsi',
+                    title: 'Deskripsi',
+                },
+                {
+                    data: 'tipe',
+                    title: 'Tipe Akun',
+                },
+                {
+                    data: 'inputby',
+                    title: 'Input Oleh',
+                },
+                {
+                    data: 'action',
+                    title: '',
+                },
+            ]
         });
+    }
 
-        $("#btambah").on('click',function(e){
-            $("#mdTambah").modal('show');
-        });
+    $("#stoktahun").on("change",function(e){
+        init_datatable();
+    });
 
-        angrTable.on('click', '.bedit',function(e){
+    $("#btambah").on('click',function(e){
+        $("#mdTambah").modal('show');
+    });
+
+    $('#tbanggaran').on('click', '.bedit',function(e){
             var kode=$(this).data('token');
+            $("#kodeanggaranedit").val(kode);
+            $("#mdEdit").modal("show");
+            get_dtbudget(kode);
+    })
 
-            alert(kode); 
-        })
+    $('#tbanggaran').on('click', '.bhapus',function(e){
+        var kode=$(this).data('token');
+        update(kode,"hapus")
+    })
 
-        $('#bInsert').on('click',function(e){
+    $('#bInsert').on('click',function(e){
             var urladd='<?=base_url('anggaran/create')?>';
                     var data=new FormData();
                     data.append("tahun",$("#tahunanggaran").val());
@@ -189,24 +303,99 @@
                                 var resp=JSON.parse(response);
                                 
                                 if(resp.stat=="ok"){
-                                    angrTable.ajax.reload();
-                                    $("#mdTambah").modal('hide');
+                                    $("#mdEdit").modal('hide');
                                 }else{
                                     alert(resp.msg);
                                 }
                             }
                         })
 
-        });
+    });
+
+    $('#bUpdate').on('click',function(e){
+        var kode=$("#kodeanggaranedit").val();
+        update(kode,"update");
+    });
 
 
-        function clearinput(){
+    function get_dtbudget(kode){
+        var urlget='<?=base_url('anggaran/get_databudget')?>';
+        var data=new FormData();
+        data.append("token",kode);
+
+        $.ajax({
+            type: "POST",
+            enctype: 'multipart/form-data',
+            url: urlget, 
+            data: data,
+            processData: false,
+            contentType: false,
+            asyn:false,
+            cache: false,
+            timeout: 800000,
+            success: function (response) {
+                var resp=JSON.parse(response);
+                if(resp.stat=="ok"){
+                    var data=resp.data.data[0];
+                           $("#akunedit").val(data.akun);
+                            $("#tahunanggaranedit").val(data.tahun);
+                            $("#anggaranedit").val(data.total_anggaran);
+                            $("#deskEdit").val(data.deskripsi);
+                            $("#infoakun").val(data.tipe_akun+"("+data.jenis_akun+")");
+                            $("#mdTambah").modal('hide');
+                    }else{
+                        alert(resp.msg);
+                    } 
+            }
+        })
+
+    }
+
+    function update(kode,act){
+        var urlupdate='<?=base_url('anggaran/update_budget')?>';
+        var data=new FormData();
+        data.append("token",kode);
+        data.append("act",act);
+        if(act=="hapus"){
+            data.append("status",'inactive');
+            
+        }else{
+            data.append("akun",$("#akunedit").val());
+            data.append("tahun",$("#tahunanggaranedit").val());
+            data.append("nominal",$("#anggaranedit").val());
+            data.append("deskripsi",$("#deskEdit").val());
+            data.append("token",kode);
+        }
+        $.ajax({
+            type: "POST",
+            enctype: 'multipart/form-data',
+            url: urlupdate, 
+            data: data,
+            processData: false,
+            contentType: false,
+            asyn:false,
+            cache: false,
+            timeout: 800000,
+            success: function (response) {
+                var resp=JSON.parse(response);
+                    alert(resp.msg);
+                    $("#mdEdit").modal('hide');
+                    init_datatable();
+            }
+        })
+    }
+
+    function clearinput(){
             $("#tahunanggaran").val("");
             $("#akun").val("");
             $("#anggaran").val(""); 
-        }
+            $("#desk").val(""); 
+    }
+
+  
 
 
-       
+    $(document).ready(function(){
+        init_datatable();
     })
 </script>

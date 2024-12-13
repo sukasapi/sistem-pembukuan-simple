@@ -30,7 +30,7 @@ class Anggaran extends CI_Controller {
 		$data['akunlist']=$akunlist;
 		$data['title']="Halaman Penganggaran";
 		$this->load->view('template/header',$data);
-		$this->load->view('anggaran/v_anggaran', $data);
+		$this->load->view('Anggaran/v_anggaran', $data);
 		$this->load->view('template/footer');
 	}
 
@@ -57,13 +57,7 @@ class Anggaran extends CI_Controller {
 		echo json_encode($result);
 	}
 
-	function update(){
-
-	}
-
-	function get_data(){
-
-	}
+	
 
 	function get_dataajax(){
 		if(isset($_POST['tahun']) && $_POST['tahun']!=""){
@@ -73,36 +67,90 @@ class Anggaran extends CI_Controller {
 		}
 
 		$filter=array("ag.tahun_anggaran"=>$tahun,"ag.status"=>'1');
-		$display="ag.kode_anggaran as kode,ag.tahun_anggaran as tahun,ag.total_anggaran, a.name as nama_akun,a.description as des_akun,a.tipe as tipe_akun,a.jenis as jenis_akun,u.nama_user";
+		$display="ag.kode_anggaran as kode,ag.tahun_anggaran as tahun,ag.total_anggaran,ag.deskripsi_anggaran deskripsi, 
+				  a.name as nama_akun,a.description as des_akun,a.tipe as tipe_akun,a.jenis as jenis_akun,u.nama_user";
 		$danggaran=$this->am->get_dataBudget($display,$filter);
 		
 		$result=array();
 		$no=1;
 		$jdata=0;
-		if(count((array)$danggaran) > 0){
-			foreach($danggaran as $da){
-				$row=array();
-				$row[]=$no;
-				$row[]=$da['nama_akun'];
-				$row[]=rupiah($da['total_anggaran']);
-				//$row[]="<button class='btn btn-sm btn-rounded btn-warning bedit' data-token='".$da['kode']."'>edit</button>";$da['kode'];
-				$row[]=$da['tahun'];
-				$row[]=$da['des_akun'];
-				$row[]=$da['tipe_akun'];
-				$row[]=$da['nama_user'];
-				
-				$result[]=$row;
-				$no++;
-			}
-			$jdata=count((array)$da);
-		}else{
-
+		$i=0;
+		foreach ($danggaran['data'] as $key) {
+			$table[$i]['no']= $no;
+			$table[$i]['akun']= $key['nama_akun'];
+			$table[$i]['nominal']= rupiah($key['total_anggaran']);
+			$table[$i]['tipe']= $key['jenis_akun']."(".$key['tipe_akun'].")";
+			$table[$i]['tahun']= $key['tahun'];
+			$table[$i]['deskripsi']= $key['deskripsi'];
+			$table[$i]['inputby']= $key['nama_user'];
+			$table[$i]['action'] = " <button type='button' class='btn btn-danger bhapus' data-token='{$key['kode']}'><i class='fa fa-trash' aria-hidden='true'></i></button> ";
+			$table[$i]['action'] .= " <button type='button' class='btn btn-warning bedit' data-token='{$key['kode']}'><i class='fa fa-edit' aria-hidden='true'></i></button> ";
+			$i++;
+			$no++;
 		}
-		$output=array("recordsTotal" =>$jdata,
-		"draw"=>$_POST['draw'],
-		"data" => $result);
+		$datatable = [
+			"data" => $table,
+			"draw" => $_POST['draw'],
+			"recordsTotal" =>$danggaran['total_res'],
+			"recordsFiltered" =>$danggaran['total_res'],
+			"sql"=>$danggaran['sql'],
+			"post"=>  $_POST['tahun']
+		];
+		$result=$datatable;
+		echo json_encode($result);
+	}
 
-		echo json_encode($output);
+	function get_databudget(){
+		$result=array();
+		if(isset($_POST['token']) && $_POST['token']!=""){
+			$filter=array("ag.kode_anggaran"=>$_POST['token']);
+			$display="ag.kode_anggaran as kode,ag.tahun_anggaran as tahun,ag.total_anggaran,ag.deskripsi_anggaran deskripsi, 
+					  a.akun_id as akun,a.name as nama_akun,a.description as des_akun,a.tipe as tipe_akun,a.jenis as jenis_akun,u.nama_user";
+			$danggaran=$this->am->get_dataBudget($display,$filter);
+			$result=array("stat"=>"ok","msg"=>"data ditemukan","data"=>$danggaran);
+		}else{
+			$result=array("stat"=>"fail","msg"=>"tidak ada parameter","data"=>[]);
+		}
+		echo json_encode($result);
+	}
+
+	function update_budget(){
+		$result=array();
+		if(isset($_POST['token']) && $_POST['token']!=""){
+			switch($_POST['act']){
+				case 'hapus':
+					$filter=array("kode_anggaran"=>$_POST['token']);
+					$data=array("status"=>"inactive");
+					$hapus=$this->am->update_anggaran($filter,$data);
+					if($hapus){
+						$result=array("stat"=>"ok","msg"=>"anggaran telah dihapus","data"=>$_POST['token']);
+					}else{
+						$result=array("stat"=>"fail","msg"=>"anggaran gagal dihapus","data"=>$_POST['token']);
+					}
+				break;
+				case 'update':
+					$filter=array("kode_anggaran"=>$_POST['token']);
+					$data=array(
+								"kode_akun"=>$_POST['akun'],
+								"tahun_anggaran"=>$_POST['tahun'],
+								"total_anggaran"=>$_POST['nominal'],
+								"deskripsi_anggaran"=>$_POST['deskripsi']
+							);
+					$update=$this->am->update_anggaran($filter,$data);
+					if($update){
+						$result=array("stat"=>"ok","msg"=>"anggaran telah diubah","data"=>$_POST['token']);
+					}else{
+						$result=array("stat"=>"fail","msg"=>"anggaran gagal diubah","data"=>$_POST['token']);
+					}
+				break;
+				default:
+					$result=array("stat"=>"fail","msg"=>"aktivitas tidak dikenali","data"=>$_POST['act']);
+				break;
+			}
+		}else{
+			$result=array("stat"=>"fail","msg"=>"tidak ada parameter","data"=>[]);
+		}
+		echo json_encode($result);
 	}
 
 }

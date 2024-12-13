@@ -36,7 +36,7 @@
                                             <!-- Form Group (password)-->
                                             <div class="mb-3">
                                                 <label class="small mb-1" for="pswd">Password</label>
-                                                <input class="form-control" id="pswd" name="pswd" type="pswd" placeholder="Masukkan kata Kunci">
+                                                <input class="form-control" id="pswd" name="pswd" type="password" placeholder="Masukkan kata Kunci">
                                             </div>
                                            
                                             <!-- Form Group (login box)-->

@@ -130,6 +130,7 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                         <a class="collapse-item" href="<?=base_url('anggaran')?>">Laporan Anggaran</a>
                         <a class="collapse-item" href="<?=base_url('transaction')?>">Laporan Transaksi</a>
+                        <a class="collapse-item" href="<?=base_url('Report')?>">Laporan Penggunaan</a>
                     </div>
                 </div>
             </li>

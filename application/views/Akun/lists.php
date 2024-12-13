@@ -78,6 +78,10 @@
                     title: 'Jenis',
                 },
                 {
+                    data: 'akun_induk',
+                    title: 'Akun Induk',
+                },
+                {
                     data: 'tipe',
                     title: 'Tipe',
                 },

@@ -27,11 +27,13 @@ class Anggaran_m extends CI_Model
        
         $exe=$this->db->get()->result_array();
         $syn=$this->db->last_query();
-        if(count((array)$exe)>0){
-            return $exe;
-        }else{
-            return array();
-        }
+        $query = $this->db->query('SELECT FOUND_ROWS() AS `Count`');
+        $total_res = $query->row()->Count; //count total data
+        return [
+            "data" => $exe,
+            "total_res" => $total_res,
+            "sql"=>$syn
+        ];
     }
 
     function insert_anggaran($data=null){

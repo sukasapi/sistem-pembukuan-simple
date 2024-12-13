@@ -34,6 +34,21 @@ class Transaction_m extends CI_Model
         return $data;
     }
 
+    function get_datanom($filter=null,$display=null){
+        $this->db->select($display)
+                 ->from('ukdw_transaksi t')
+                 ->join('ukdw_akun a','a.akun_id=t.category_id')
+                 ->where($filter);
+        $exe=$this->db->get();
+        $sql=$this->db->last_query();
+        $data = $exe->result_array();
+        if(count((array)$data)>0){
+            return $data;
+        }else{
+            return array();
+        }
+    }   
+
     public function get_data()
     {
         $server_side = $this->post['server_side'];
@@ -85,6 +100,7 @@ class Transaction_m extends CI_Model
         ];
     }
 
+
     public function insert($data)
     {
         $this->db->insert($this->table, $data);
@@ -119,4 +135,59 @@ class Transaction_m extends CI_Model
             }  
     }
 
+    public function get_databyakun()
+    {
+        $fl=array();
+        $server_side = $this->post['server_side'];
+        parse_str($this->post['filter'], $filter);
+        if ($filter['akun'] != '') {
+           // $this->db->where('a.akun_induk', $filter['akun']);
+            $fl['a.akun_induk']=$filter['akun'];
+        }
+
+
+
+        if ($filter['range_start'] != '') {
+            $this->db->where("DATE_FORMAT(a.create_date,'%Y-%m-%d') >=", $filter['range_start']);
+            $fl["DATE_FORMAT(a.create_date,'%Y-%m-%d') >="]=$filter['range_start'];
+        }
+
+        if ($filter['range_end'] != '') {
+            $this->db->where("DATE_FORMAT(a.create_date,'%Y-%m-%d') <=", $filter['range_end']);
+            $fl["DATE_FORMAT(a.create_date,'%Y-%m-%d') >="]=$filter['range_end'];
+        }
+
+        // if ($filter['range_start'] == '' && $filter['range_end'] == '') {
+        //     $current_mount = date("Y-m");
+        //     $this->db->where("DATE_FORMAT(a.create_date,'%Y-%m')", $current_mount);
+        // }
+        $filter['a.status']="active";
+        $this->db->select("")
+                 ->from("ukdw_transaksi t")
+                 ->join("ukdw_akun a","a.akun_id=t.category_id","left")
+                 ->where($fl)
+                 ->order_by('create_date', 'ASC');
+     
+        if ($server_side == true) {
+            $this->db->limit($this->post['length'], $this->post['start']);
+        }
+        $query = $this->db->get();
+        $sql=$this->db->last_query();
+        $data = $query->result_array();
+
+        // var_dump($this->db->last_query());exit;
+
+        $query = $this->db->query('SELECT FOUND_ROWS() AS `Count`');
+        $total_res = $query->row()->Count; //count total data
+
+        return [
+            "data" => $data,
+            "total_res" => $total_res,
+            "sql"=>$sql
+        ];
+    }
+
+
+    
+  
 }
