@@ -48,9 +48,9 @@ class Akun extends CI_Controller {
 	{
 		$this->pageInfo['nav_ids'][] = "Akun_create";
 		$this->pageInfo['page_title'][] = "Create";
-		$filter=array("status"=>"active","akun_induk"=>"0");
+		$filter=array("status"=>"active","akun_id=akun_induk");
 		$display="akun_id,name,description";
-		$akunlist=$this->Akun_m->get_akunlist($filter,$display);
+		$akunlist=$this->Akun_m->get_akuninduk($display);
 		$data['akuninduk']=$akunlist;
 		$data['title'] = "Create Kategori";
 		$this->load->view('template/header',$data);
@@ -67,7 +67,7 @@ class Akun extends CI_Controller {
         ];
 		$filter=array("status"=>"active","akun_induk"=>"0");
 		$display="akun_id,name,description";
-		$akunlist=$this->Akun_m->get_akunlist($filter,$display);
+		$akunlist=$this->Akun_m->get_akuninduk($display);
 		$data['akuninduk']=$akunlist;
 		$data['title'] = "Buat Akun";
 		$this->load->view('template/header',$data);
@@ -99,7 +99,7 @@ class Akun extends CI_Controller {
 			$table[$i]['jenis']=$key['jenis']=="in"?"pemasukan":"pengeluaran";
 			$table[$i]['tipe']=$key['tipe'];
 			$table[$i]['action'] = "<a href='".site_url('akun/update/'.$key['akun_id'])."' type='button' class='btn btn-update btn-primary'>Update</a>";
-			$table[$i]['action'] .= " <button type='button' class='btn update-status btn-danger' data-id=".site_url('akun/update/'.$key['akun_id'])." data-status='inactive'>Delete</button>";
+			$table[$i]['action'] .= " <button type='button' class='btn update-status btn-danger' data-id='".$key['akun_id']."' data-status='inactive'>Delete</button>";
 
 			$i++;
 		}
@@ -142,9 +142,14 @@ class Akun extends CI_Controller {
         $data = [
             'status' => $this->post['status'],
         ];
-		$filter=array("akun_id"=>$id);
+		$filter=array("akun_id"=>$_POST['id']);
         $process = $this->Akun_m->update($filter,$data);
-        echo json_encode($process);
+		if($process){
+			$result="ok";
+		}else{
+			$result="gagal";
+		}
+        echo json_encode($result);
     }
 
 	function tes(){

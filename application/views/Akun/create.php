@@ -57,8 +57,7 @@
 </div>
 <?php $this->load->view("template/footer");?>
 <script>
-    $(document).ready(function() {
-    });
+  
     function save(){
         $.ajax({
             url : '<?=site_url('Akun/process_insert/');?>',
@@ -87,7 +86,8 @@
             var akuninduk=textakun.split(" ");
             $("#akuname").val(akuninduk[0]);
         }
-        
-       
     })
+
+    $(document).ready(function() {
+    });
 </script>

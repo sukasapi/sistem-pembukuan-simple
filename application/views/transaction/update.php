@@ -7,7 +7,7 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">Akun</label>
                             <div class="col-sm-12">
-                            <select class="form-control" name="category_id">
+                            <select readonly class="form-control" name="category_id">
                             <?php foreach ($akun as $key) :?>
                                 <option value='<?=$key['akun_id']?>' <?=($detail['category_id']==$key['akun_id']?'selected':'')?>>[<?=$key['jenis']."-".$key['tipe']?>] <?=$key['name']?></option>
                             <?php endforeach?>

@@ -31,13 +31,13 @@
                             <div class="col-3 mb-2">
                                 <div class="form-group">
                                     <label>Mulai</label>
-                                    <input type="date" placeholder="Start" class="form-control" data-date-format="dd-mm-yyyy" name="range_start" id="range_start">
+                                    <input type="date" value="<?=date('Y')."-01-01" ?>" placeholder="Start" class="form-control" data-date-format="dd-mm-yyyy" name="range_start" id="range_start">
                                 </div>
                             </div>
                             <div class="col-3 mb-2">
                                 <div class="form-group">
                                     <label>Selesai</label>
-                                    <input type="date" placeholder="End" class="form-control" data-date-format="dd-mm-yyyy" name="range_end"  id="range_end">
+                                    <input type="date" value="<?=date('Y')."-12-31" ?>" placeholder="End" class="form-control" data-date-format="dd-mm-yyyy" name="range_end"  id="range_end">
                                 </div>
                             </div>
                         </div>
@@ -158,7 +158,7 @@
                 },
                 {
                     data: 'tanggal_lpj',
-                    title: 'LPJ',
+                    title: 'Tanggal_LPJ',
                 },
                 {
                     data: 'action',
@@ -169,20 +169,24 @@
     }
 
     $('#datatable').on( "click", ".update-status", function(){
-        $id = $(this).data('id');
-        $status = $(this).data('status');
+        var id = $(this).data('id');
+        var status = $(this).data('status');
         //alert($status);
         $.ajax({
                 url : '<?=site_url($this->pageInfo['table_base'] . '/update_status/');?>',
                 type: "POST",
                 data: {
-                        id: $id,
-                        status: $status,
+                        id: id,
+                        status: status,
                         csrf_test_name: $.cookie('csrf_cookie_name')
                     },
                 dataType: "JSON",
                 success: function(data)
                 {
+                    if(status=='inactive'){
+                        alert("Proses penghapusan data berhasil")
+                    }
+                  
                     init_datatable();
                 },
                 error: function (jqXHR, textStatus, errorThrown)

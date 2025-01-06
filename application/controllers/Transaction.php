@@ -76,7 +76,7 @@ class Transaction extends CI_Controller {
 			$table[$i]['nominal']= rupiah($key['nominal']);
 			$table[$i]['action'] = " <button type='button' class='btn uploadLPJ btn-warning' data-token='{$key['transaction_id']}'><i class='fa fa-upload' aria-hidden='true'></i></button> ";
 			if($key['lpj_date']!=""){
-				$table[$i]['action'] .= "<button type='button' class='btn viewLPJ btn-success' data-token='{$key['transaction_id']}'><i class='fa fa-file' aria-hidden='true'></i></button> ";
+				$table[$i]['tanggal_lpj'] .= "<br><button type='button' class='btn viewLPJ btn-success' data-token='{$key['transaction_id']}'><i class='fa fa-file' aria-hidden='true'></i></button> ";
 			}else{
 				
 			}

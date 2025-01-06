@@ -43,7 +43,7 @@ class Anggaran extends CI_Controller {
 			$offOther=$this->am->update_anggaran($filter,$data);
 			//insertnew
 			$kodeanggaran=uniqid("AGRN",true);
-			$datainput=array("kode_anggaran"=>$kodeanggaran,"kode_akun"=>$_POST['akun'],"total_anggaran"=>$_POST['anggaran'],"tahun_anggaran"=>$_POST['tahun'],"create_date"=>date('Y-m-d H:i:s'),"status"=>'1',"kode_user"=>$_POST['ukode']);
+			$datainput=array("kode_anggaran"=>$kodeanggaran,"kode_akun"=>$_POST['akun'],"total_anggaran"=>$_POST['anggaran'],"tahun_anggaran"=>$_POST['tahun'],"create_date"=>date('Y-m-d H:i:s'),"status"=>'1',"kode_user"=>$_POST['ukode'],"deskripsi_anggaran"=>$_POST['deskripsi']);
 			$inputagrn=$this->am->insert_anggaran($datainput);
 			if($inputagrn){
 				$result = array("stat"=>"ok","msg"=>"Data berhasil dimasukkan","data"=>$kodeanggaran);	
@@ -75,27 +75,40 @@ class Anggaran extends CI_Controller {
 		$no=1;
 		$jdata=0;
 		$i=0;
-		foreach ($danggaran['data'] as $key) {
-			$table[$i]['no']= $no;
-			$table[$i]['akun']= $key['nama_akun'];
-			$table[$i]['nominal']= rupiah($key['total_anggaran']);
-			$table[$i]['tipe']= $key['jenis_akun']."(".$key['tipe_akun'].")";
-			$table[$i]['tahun']= $key['tahun'];
-			$table[$i]['deskripsi']= $key['deskripsi'];
-			$table[$i]['inputby']= $key['nama_user'];
-			$table[$i]['action'] = " <button type='button' class='btn btn-danger bhapus' data-token='{$key['kode']}'><i class='fa fa-trash' aria-hidden='true'></i></button> ";
-			$table[$i]['action'] .= " <button type='button' class='btn btn-warning bedit' data-token='{$key['kode']}'><i class='fa fa-edit' aria-hidden='true'></i></button> ";
-			$i++;
-			$no++;
+		$table=array();
+		if(count((Array)$danggaran)>0){
+			foreach ($danggaran['data'] as $key) {
+				$table[$i]['no']= $no;
+				$table[$i]['akun']= $key['nama_akun']."<br>".$key['des_akun'];
+				$table[$i]['nominal']= rupiah($key['total_anggaran']);
+				$table[$i]['tipe']= $key['jenis_akun']."(".$key['tipe_akun'].")";
+				$table[$i]['tahun']= $key['tahun'];
+				$table[$i]['deskripsi']= $key['deskripsi'];
+				$table[$i]['inputby']= $key['nama_user'];
+				$table[$i]['action'] = " <button type='button' class='btn btn-danger bhapus' data-token='{$key['kode']}'><i class='fa fa-trash' aria-hidden='true'></i></button> ";
+				$table[$i]['action'] .= " <button type='button' class='btn btn-warning bedit' data-token='{$key['kode']}'><i class='fa fa-edit' aria-hidden='true'></i></button> ";
+				$i++;
+				$no++;
+			}
+			$datatable = [
+				"data" => $table,
+				"draw" => $_POST['draw'],
+				"recordsTotal" =>$danggaran['total_res'],
+				"recordsFiltered" =>$danggaran['total_res'],
+				"sql"=>$danggaran['sql'],
+				"post"=>  $_POST['tahun']
+			];
+		}else{
+			$datatable = [
+				"data" =>$table,
+				"draw" => $_POST['draw'],
+				"recordsTotal" =>$danggaran['total_res'],
+				"recordsFiltered" =>$danggaran['total_res'],
+				"sql"=>$danggaran['sql'],
+				"post"=>  $_POST['tahun']
+			];
 		}
-		$datatable = [
-			"data" => $table,
-			"draw" => $_POST['draw'],
-			"recordsTotal" =>$danggaran['total_res'],
-			"recordsFiltered" =>$danggaran['total_res'],
-			"sql"=>$danggaran['sql'],
-			"post"=>  $_POST['tahun']
-		];
+		
 		$result=$datatable;
 		echo json_encode($result);
 	}

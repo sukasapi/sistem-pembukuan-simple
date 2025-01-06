@@ -106,15 +106,15 @@
     })
 
    $('#datatable').on( "click", ".update-status", function(){
-        $id = $(this).data('id');
-        $status = $(this).data('status');
+        var id = $(this).data('id');
+        var status = $(this).data('status');
         //alert($status);
         $.ajax({
                 url : '<?=site_url('Akun/update_status/');?>',
                 type: "POST",
                 data: {
-                        id: $id,
-                        status: $status,
+                        id: id,
+                        status: status,
                         csrf_test_name: $.cookie('csrf_cookie_name')
                     },
                 dataType: "JSON",

@@ -151,12 +151,6 @@
                             </div>
                             <div class="col-12">
                                 <div class="form-group">
-                                    <label for='tipe'>Tipe Akun</label>
-                                    <input type="text" readonly class="form-control" id="infoakun">
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="form-group">
                                     <label for='tahun'>Tahun Anggaran</label>
                                     <select name="tahunanggaranedit" id="tahunanggaranedit" class="form-control">
                                         <option disabled selected>Pilih Tahun Anggaran</option>
@@ -288,6 +282,7 @@
                     data.append("tahun",$("#tahunanggaran").val());
                     data.append("akun",$("#akun").val());
                     data.append("anggaran",$("#anggaran").val());
+                    data.append("deskripsi",$("#desk").val());
                     data.append("ukode",'<?=$_SESSION['ukode']?>'); 
                     $.ajax({
                             type: "POST",
@@ -304,8 +299,9 @@
                                 
                                 if(resp.stat=="ok"){
                                     $("#mdEdit").modal('hide');
+                                    window.location.reload();
                                 }else{
-                                    alert(resp.msg);
+                                    window.location.reload();
                                 }
                             }
                         })
@@ -391,8 +387,6 @@
             $("#anggaran").val(""); 
             $("#desk").val(""); 
     }
-
-  
 
 
     $(document).ready(function(){

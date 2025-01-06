@@ -42,6 +42,14 @@ class Akun_m extends CI_Model
         return $data;
     }
 
+    function get_akuninduk($display){
+        $query="select ".$display." FROM ukdw_akun WHERE akun_id=akun_induk";
+        $exe=$this->db->query($query);
+        $data=$exe->result_array();
+        $sql=$this->db->last_query();
+        return $data;
+    }
+
     public function get_datalist($status){
         $this->db->where('status', $status); //onli active item
         $this->db->select("*", false);
